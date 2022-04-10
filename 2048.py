@@ -20,11 +20,9 @@ Score = 0
 
 
 def grille():
-    """""""""""""""""
-    Initialisation de notre grille et de la configuration Courante.
+    """"Initialisation de notre grille et de la configuration Courante.
     i et j nous permettent de gérer les coordonnées des points délimitants le
-    canvas
-    """""""""""""""
+    canvas """
 
     global Grille
 
@@ -43,42 +41,49 @@ def grille():
 
 
 def Up():
+    """"Fonction lier au bouton Haut """
     pass
 
 
 def Down():
+    """"Fonction lier au bouton Bas """
     pass
 
 
 def Left():
+    """"Fonction lier au bouton Gauche """
     pass
 
 
 def Right():
+    """"Fonction lier au bouton Droite """
     pass
 
 
 def End():
+    """"Fonction lier au bouton Exit """
     pass
 
 
 def Load():
+    """"Fonction lier au bouton Charger """
     pass
 
 
 def Save():
+    """"Fonction lier au bouton Sauvegarder """
     pass
 
 
 def Calcul():
+    """"Fonction qui gère les movement sur la grille """
     pass
 
 # ------------------------ Code Principale ------------------------ #
 
-# Parrametre de la racine et Canvas
-
 
 racine = tk.Tk()
+# Parrametre de la racine et Canvas
 racine.title("2048")
 Canvas = tk.Canvas(bg='white', height=HEIGHT_CANVAS, width=WIDHT_CANVAS)
 Plateau = grille()
@@ -86,7 +91,7 @@ Plateau = grille()
 # Bouttons
 Bouton_Play = tk.Button(text='Play')
 Bouton_Exit = tk.Button(text="Exit")
-Bouton_Save = tk.Button(text="Sauvgarder")
+Bouton_Save = tk.Button(text="Sauvegarder")
 Bouton_Load = tk.Button(text="Charger")
 Bouton_Up = tk.Button(text="Haut")
 Bouton_Down = tk.Button(text="Bas")
@@ -94,22 +99,23 @@ Bouton_Right = tk.Button(text="Droite")
 Bouton_Left = tk.Button(text="Gauche")
 
 # Label
-Label_Score = tk.Label(text="Score")
-# Label_Valeur_Score = tk.Label(textvariable= str(Score))
+Label_Score = tk.Label(text="Score :", foreground="Black", font="Arial 10")
+Label_Valeur_Score = tk.Label(text=str(Score), foreground="Blue",
+                              font="Arial 10")
 
 
 # Placement des éléments
-Label_Score.grid(row=1, column=2)
-# Label_Valeur_Score(row=1, column=3)
-Canvas.grid(row=2, column=2, columnspan=4, rowspan=5)
-Bouton_Play.grid(row=2, column=1)
-Bouton_Exit.grid(row=3, column=1)
-Bouton_Save.grid(row=4, column=1)
-Bouton_Load.grid(row=5, column=1)
-Bouton_Up.grid(row=3, column=3)
-Bouton_Down.grid(row=4, column=3)
-Bouton_Right.grid(row=4, column=2)
-Bouton_Left.grid(row=4, column=4)
+Label_Score.grid(row=0, column=1, columnspan=1)
+Label_Valeur_Score.grid(row=0, column=2, columnspan=1)
+Canvas.grid(row=1, column=1, columnspan=1, rowspan=5)
+Bouton_Play.grid(row=2, column=0)
+Bouton_Exit.grid(row=3, column=0)
+Bouton_Save.grid(row=4, column=0)
+Bouton_Load.grid(row=5, column=0)
+Bouton_Up.grid(row=2, column=4)
+Bouton_Down.grid(row=3, column=4)
+Bouton_Right.grid(row=3, column=3)
+Bouton_Left.grid(row=3, column=5)
 
 # mainloop
 racine.mainloop()
