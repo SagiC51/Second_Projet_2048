@@ -31,10 +31,11 @@ def rgbtohex(r, g, b):
 
 def grille():
     "Initialisation de notre grille et de la configuration Courante."
-    global Grille, Run
+    global Grille, Run, Score
     # i et j nous permettent de gérer les coordonnées des points délimitants le
     # canvas
     Run = True
+    Score = 0
     Grille = []  # Grille
     for i in range(0, N):
         intermediaire = []
@@ -44,16 +45,14 @@ def grille():
             xb = j*HEIGHT_CANVAS/N
             yb = (i+1)*WIDHT_CANVAS/N
             intermediaire.append(Canvas.create_rectangle(xh, yh, xb, yb,
-                                                         fill=rgbtohex(208, 193, 180),
-                                                         outline=rgbtohex(187, 173, 160), width=10))
+                                                         fill=rgbtohex
+                                                         (208, 193, 180),
+                                                         outline=rgbtohex
+                                                         (187, 173, 160),
+                                                         width=10))
         Grille.append(intermediaire)
-    spawn()
     print(Grille, "Grille")
-    return
-
-
-def maj(Liste):
-    pass
+    spawn()
 
 
 def spawn():
@@ -62,7 +61,6 @@ def spawn():
     for i in range(0, len(liste)):
         for j in range(0, len(liste)):
             liste[i][j] -= liste[i][j]
-    print(liste, 'liste_0')
     for k in range(0, 2):
         aleat_x = random.randint(0, len(liste)-1)
         aleat_y = random.randint(0, len(liste)-1)
@@ -73,15 +71,19 @@ def spawn():
             xb = (aleat_y+1)*HEIGHT_CANVAS/N
             yb = (aleat_x+1)*WIDHT_CANVAS/N
             Grille.append(Canvas.create_rectangle(xh, yh, xb, yb,
-                                                    fill=rgbtohex(238, 228, 218),
-                                                    outline=rgbtohex(187,173,160),
-                                                    width=10 ))
+                                                  fill=rgbtohex(238, 228, 218),
+                                                  outline=rgbtohex
+                                                  (187, 173, 160),
+                                                  width=10))
             Liste_sapwn_tuile = [2, 4]
             Nbr = choice(Liste_sapwn_tuile)
-            Grille.append(Canvas.create_text((xh+xb)//2, (yb+yh)//2, text=str(Nbr), fill=rgbtohex(120,111,102), font=("arial black", 30)))
-            print(liste, 'liste-1')
+            Grille.append(Canvas.create_text((xh+xb)//2,
+                          (yb+yh)//2, text=str(Nbr),
+                          fill=rgbtohex(120, 111, 102),
+                          font=("arial black", 30)))
         else:
             print("ERREUR")
+    print(liste, 'liste_1')
     return
 
 
@@ -109,47 +111,37 @@ def End():
     """"Fonction lier au bouton Exit """
     global Run, Score
     Run = False
-    Score = 10
     Canvas.itemconfigure(Label_Valeur_Score, text=str(Score))
-    
-
-
-def Load():
-    global Grille
-    """"Fonction lier au bouton Charger """
-    fic = open("Save", "r")
-    Grille_S = []
-    for i in range(N+2):
-        for j in range(N+2):
-            Grille_S.append([i][j])
-    ligne = fic.readline()
-    n = int(ligne)
-    if n != N:
-        fic.close()
-        return Grille_S
-    i = j = 0
-    for ligne in fic:
-        liste[i][j] = int(ligne)
-        j += 1
-        if j == N + 1:
-            j = 1
-            i += 1
-    fic.close()
-    Grille = Grille_S
-    print(Grille, "Load")
 
 
 def Save():
-    global Grille
-    """"Fonction lier au bouton Sauvegarder """
+    global liste
+    """"Fonction lier au bouton Sauvegarder
+    elle permet de sauvgarder un la dernier liste"""
     fic = open("Save", "w")
-    fic.write("Sauvegarde :"+"\n")
     for i in range(0, N):
         for j in range(0, N):
-            fic.write(str(liste[i][j]))
-            fic.write("\n")
+            fic.write(str(liste[i][j])+"\n")
     fic.close()
-    print(liste[i][j], "save")
+    print(liste, "save")
+
+
+def Load():
+    global liste
+    """"Fonction lier au bouton Charger
+    elle peurmet de charger la liste sauvgarder dans le fichier save"""
+    fic = open("Save", "r")
+    Grille_S = []
+    for i in range(N):
+        Grille_S.append([0]*N)
+    for line in fic:
+        for i in range(0, N):
+            for j in range(0, N):
+                Grille_S[i][j] = int(line)
+                line = fic.readline()
+    fic.close()
+    liste = Grille_S
+    print(liste, "Load")
 
 
 def Calcul():
