@@ -65,7 +65,9 @@ def spawn():
         aleat_x = random.randint(0, len(liste)-1)
         aleat_y = random.randint(0, len(liste)-1)
         if liste[aleat_x][aleat_y] == 0:
-            liste[aleat_x][aleat_y] += 1
+            Liste_sapwn_tuile = [2, 4]
+            Nbr = choice(Liste_sapwn_tuile)
+            liste[aleat_x][aleat_y] = Nbr
             xh = (aleat_y)*HEIGHT_CANVAS/N
             yh = aleat_x*HEIGHT_CANVAS/N
             xb = (aleat_y+1)*HEIGHT_CANVAS/N
@@ -75,8 +77,6 @@ def spawn():
                                                   outline=rgbtohex
                                                   (187, 173, 160),
                                                   width=10))
-            Liste_sapwn_tuile = [2, 4]
-            Nbr = choice(Liste_sapwn_tuile)
             Grille.append(Canvas.create_text((xh+xb)//2,
                           (yb+yh)//2, text=str(Nbr),
                           fill=rgbtohex(120, 111, 102),
