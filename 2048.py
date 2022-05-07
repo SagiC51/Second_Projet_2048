@@ -109,9 +109,14 @@ def Right():
 
 def End():
     """"Fonction lier au bouton Exit """
-    global Run, Score
+    global Run, Score, liste
     Run = False
-    Canvas.itemconfigure(Label_Valeur_Score, text=str(Score))
+    for i in range(0, N):
+        for j in range(0, N):
+            Score += int(liste[i][j])
+    Label_Valeur_Score = tk.Label(text=str(Score), foreground="Blue",
+                                  font="Arial 10")
+    Label_Valeur_Score.grid(row=0, column=2, columnspan=1)
 
 
 def Save():
@@ -169,13 +174,9 @@ Bouton_Left = tk.Button(text="Gauche", command=Left)
 
 # Label
 Label_Score = tk.Label(text="Score :", foreground="Black", font="Arial 10")
-Label_Valeur_Score = tk.Label(text=str(Score), foreground="Blue",
-                              font="Arial 10")
-
 
 # Placement des éléments
 Label_Score.grid(row=0, column=1, columnspan=1)
-Label_Valeur_Score.grid(row=0, column=2, columnspan=1)
 Canvas.grid(row=1, column=1, columnspan=1, rowspan=5)
 Bouton_Play.grid(row=2, column=0)
 Bouton_Exit.grid(row=3, column=0)
