@@ -56,6 +56,7 @@ liste_tuile3 = np.array([[0, 0], [0, 0]])
 liste_tuile4 = np.array([[0, 0], [0, 0]])
 liste_tuile4D = [liste_tuile1, liste_tuile2, liste_tuile3, liste_tuile4]
 eventhard = False
+event_win = False
 
 # --------------------------- Fonction ---------------------------- #
 
@@ -65,10 +66,10 @@ def Classique():
     Initialisation de notre grille.
     """
     global Score, grille, event, grille_tuile, liste_tuile, grille_nbr
-    global nbr_aleat, event_classique, event4d
-
+    global nbr_aleat, event_classique, event4d, event_win
     event_classique = True
     event4d = False
+    event_win = False
     if event_classique is True:
         if event is False:
             Bouton_replay.grid_forget()
@@ -107,10 +108,11 @@ def Secondmode():
     """
     global Score, grille1, grille2, grille3, grille4, event, liste_tuile1
     global liste_tuile2, liste_tuile3, liste_tuile4, liste_tuile4D, nbr_aleat
-    global event_classique, event4d
+    global event_classique, event4d, event_win
 
     event_classique = False
     event4d = True
+    event_win = False
     if event4d is True:
         if event is False:
             Bouton_replay.grid_forget()
@@ -515,7 +517,8 @@ def Up():
                             liste_tuile[i][j] *= 2
                             liste_tuile[i+1][j] = 0
                             break
-            # On regarde si l'on peut faire spawn une tuile ou non ie on regarde si la liste finale est égale à la liste initiale ou non
+            # On regarde si l'on peut faire spawn une tuile ou non. On regarde aussi la liste finale est égale à la liste initiale.
+            # On regarde aussi si on atteint le nonbre 2048 ou si la grille est pleine.
             compteur = 0
             for i in range(0,len(liste_tuile)):
                 for j in range(0,len(liste_tuile)):
@@ -525,6 +528,13 @@ def Up():
                 spawn_tuile()
                 maj()
                 maj_score()
+            elif compteur == 16:
+                lose()
+            if event_win is False:
+                for i in range(0,len(liste_tuile)):
+                    for j in range(0,len(liste_tuile)):
+                        if L[i][j] == 2048:
+                                win()
 
     elif event4d is True:
         if event is True:
@@ -551,10 +561,18 @@ def Up():
                     for j in range(0,len(tuile)):
                         if L[i][j] == tuile[i][j]:
                             compteur += 1
+                if event_win is False:
+                    for i in range(0,len(tuile)):
+                        for j in range(0,len(tuile)):
+                            if L[i][j] == 2048:
+                                win()
             if compteur != 16:
                 spawn_tuile()
                 maj()
                 maj_score()
+            elif compteur == 16:
+                lose()
+    return
 
 
 def Down():
@@ -600,6 +618,13 @@ def Down():
                 spawn_tuile()
                 maj()
                 maj_score()
+            elif compteur == 16:
+                lose()
+            if event_win is False:
+                for i in range(0,len(liste_tuile)):
+                    for j in range(0,len(liste_tuile)):
+                        if L[i][j] == 2048:
+                                win()
 
     elif event4d is True:
         if event is True:
@@ -616,20 +641,28 @@ def Down():
                                         break
                 for i in range(len(tuile)-1, -1,-1):
                     for j in range(0, len(tuile)):
-                        if tuile[i-1][j] == tuile[i][j] and tuile[i][j] != 0: 
+                        if tuile[i-1][j] == tuile[i][j] and tuile[i][j] != 0:
                             tuile[i][j] *= 2
                             tuile[i-1][j] = 0
-                            break                                                                                       
+                            break
                 compteur = 0
                 for i in range(0,len(tuile)):
                     for j in range(0,len(tuile)):
                         if L[i][j] == tuile[i][j]:
                             compteur += 1
+                if event_win is False:
+                    for i in range(0,len(tuile)):
+                        for j in range(0,len(tuile)):
+                            if L[i][j] == 2048:
+                                win()
             if compteur != 16:
                 spawn_tuile()
                 maj()
                 maj_score()
+            elif compteur == 16:
+                lose()
     return
+
 
 def Left():
     """"Fonction lier au bouton Gauche """
@@ -640,7 +673,7 @@ def Left():
             #On modifie la liste associée aux tuiles
             for i in range(0, len(liste_tuile)):
                 for j in range(0, len(liste_tuile)):
-                    if liste_tuile[i][j] != 0:              
+                    if liste_tuile[i][j] != 0:
                         val = liste_tuile[i][j]
                         for k in range(0,j):
                             if liste_tuile[i][k] == 0:
@@ -649,13 +682,13 @@ def Left():
                                 break
             for i in range(0,len(liste_tuile)):
                 for j in range(0, len(liste_tuile)-1):
-                    if liste_tuile[i][j+1] == liste_tuile[i][j] and liste_tuile[i][j] != 0: 
+                    if liste_tuile[i][j+1] == liste_tuile[i][j] and liste_tuile[i][j] != 0:
                         if j == 0:
                             liste_tuile[i][j] *= 2
                             liste_tuile[i][j+1] = liste_tuile[i][j+2]
                             liste_tuile[i][j+2] = liste_tuile[i][j+3]
                             liste_tuile[i][j+3] = 0
-                            break                                                                                       
+                            break
                         elif j == 1:
                             liste_tuile[i][j] *= 2
                             liste_tuile[i][j+1] = liste_tuile[i][j+2]
@@ -674,13 +707,21 @@ def Left():
                 spawn_tuile()
                 maj()
                 maj_score()
+            elif compteur == 16:
+                lose()
+            if event_win is False:
+                for i in range(0,len(liste_tuile)):
+                    for j in range(0,len(liste_tuile)):
+                        if L[i][j] == 2048:
+                                win()
+
     elif event4d is True:
         if event is True:
             for tuile in liste_tuile4D:
                 L=copy.deepcopy(tuile)
                 for i in range(0, len(tuile)):
                     for j in range(0, len(tuile)):
-                        if tuile[i][j] != 0:              
+                        if tuile[i][j] != 0:
                             val = tuile[i][j]
                             for k in range(0,j):
                                 if tuile[i][k] == 0:
@@ -689,21 +730,29 @@ def Left():
                                     break
                 for i in range(0,len(tuile)):
                     for j in range(0, len(tuile)-1):
-                        if tuile[i][j+1] == tuile[i][j] and tuile[i][j] != 0: 
+                        if tuile[i][j+1] == tuile[i][j] and tuile[i][j] != 0:
                             if j == 0:
                                 tuile[i][j] *= 2
                                 tuile[i][j+1] = 0
-                                break                                                                                       
+                                break
                 compteur = 0
                 for i in range(0,len(tuile)):
                     for j in range(0,len(tuile)):
                         if L[i][j] == tuile[i][j]:
                             compteur += 1
+                if event_win is False:
+                    for i in range(0,len(tuile)):
+                        for j in range(0,len(tuile)):
+                            if L[i][j] == 2048:
+                                win()
             if compteur != 16:
                 spawn_tuile()
                 maj()
                 maj_score()
+            elif compteur == 16:
+                lose()
     return
+
 
 def Right():
     """"Fonction lier au bouton Droite """
@@ -714,7 +763,7 @@ def Right():
             #On modifie la liste associée aux tuiles
             for i in range(0, len(liste_tuile)):
                 for j in range(len(liste_tuile)-1, -1, -1):
-                    if liste_tuile[i][j] != 0:        #1 , 0      
+                    if liste_tuile[i][j] != 0:        #1 , 0
                         val = liste_tuile[i][j]
                         for k in range(len(liste_tuile)-1,j,-1):
                                 if liste_tuile[i][k] == 0:
@@ -723,13 +772,13 @@ def Right():
                                     break
             for i in range(0, len(liste_tuile)):
                 for j in range(len(liste_tuile)-1, -1,-1):
-                    if liste_tuile[i][j-1] == liste_tuile[i][j] and liste_tuile[i][j] != 0: 
+                    if liste_tuile[i][j-1] == liste_tuile[i][j] and liste_tuile[i][j] != 0:
                         if j == len(liste_tuile)-1:
                             liste_tuile[i][j] *= 2
                             liste_tuile[i][j-1] = liste_tuile[i][j-2]
                             liste_tuile[i][j-2] = liste_tuile[i][j-3]
                             liste_tuile[i][j-3] = 0
-                            break                                                                                       
+                            break
                         elif j == 2:
                             liste_tuile[i][j] *= 2
                             liste_tuile[i][j-1] = liste_tuile[i][j-2]
@@ -748,14 +797,21 @@ def Right():
                 spawn_tuile()
                 maj()
                 maj_score()
+            elif compteur == 16:
+                lose()
+            if event_win is False:
+                for i in range(0,len(liste_tuile)):
+                    for j in range(0,len(liste_tuile)):
+                        if L[i][j] == 2048:
+                                win()
 
-    elif event4d is True:   
+    elif event4d is True:
         if event is True:
             for tuile in liste_tuile4D:
                 L=copy.deepcopy(tuile)
                 for i in range(0, len(tuile)):
                     for j in range(len(tuile)-1, -1, -1):
-                        if tuile[i][j] != 0: 
+                        if tuile[i][j] != 0:
                             val = tuile[i][j]
                             for k in range(len(tuile)-1,j,-1):
                                     if tuile[i][k] == 0:
@@ -764,7 +820,7 @@ def Right():
                                         break
                 for i in range(0, len(tuile)):
                     for j in range(len(tuile)-1, -1,-1):
-                        if tuile[i][j-1] == tuile[i][j] and tuile[i][j] != 0: 
+                        if tuile[i][j-1] == tuile[i][j] and tuile[i][j] != 0:
                             if j == len(tuile)-1:
                                 tuile[i][j] *= 2
                                 tuile[i][j-1] = 0
@@ -773,19 +829,29 @@ def Right():
                     for j in range(0,len(tuile)):
                         if L[i][j] == tuile[i][j]:
                             compteur += 1
+                if event_win is False:
+                    for i in range(0,len(tuile)):
+                        for j in range(0,len(tuile)):
+                            if L[i][j] == 2048:
+                                win()
             if compteur != 16:
                 spawn_tuile()
                 maj()
-                maj_score() 
+                maj_score()
+            elif compteur == 16:
+                lose()
     return
+
 
 def End():
     global event
     """"Fonction lier au bouton Exit """
     event = False
     canvas.create_rectangle(0,0,HEIGHT_CANVAS,WIDHT_CANVAS,fill= 'white')
+    game_over['text'] = 'Vous avez perdu'
     game_over.grid(row=3, column=1, columnspan=1)
     Bouton_replay.grid(row=5, column=1)
+
 
 def Save():
     global liste_tuile, liste_tuile4D, event4d, event_classique
@@ -808,6 +874,7 @@ def Save():
                 for j in range(0, n):
                     fic.write(str(liste_save[i][j])+"\n")
         fic.close()
+
 
 def Load():
     global liste_tuile, event4d, event_classique, liste_tuile4D
@@ -849,29 +916,54 @@ def Load():
                for j in range(0, N):
                     Grille_S[i][j] = int(line)
                     line = fic.readline()
-       liste_tuile = np.array(Grille_S)  
+       liste_tuile = np.array(Grille_S)
        maj()
     fic.close()
-    
+
 
 def Hard():
     """active l'evenement pour passer le jeu en hard"""
     global eventhard
     eventhard = True
-    windows = tk.Toplevel(racine)   
+    windows = tk.Toplevel(racine)
     Label_Travaux = tk.Label(windows, text="Cette fonction n'est pas disponible", foreground='Black',
                                font='Arial 25',)
     Label_Travaux.grid(row=0, column=1, columnspan=1)
 
+
+def win():
+    global liste_tuile, event_win
+    event_win = True
+    window = tk.Toplevel()
+    Label_win = tk.Label(window,text="Bravo vous avez gagnez"+"/n"+"Vous avez atteint 2048", foreground='Black', font='Arial 30')
+    Label_win.grid(row=0, column = 0)
+
+
+def lose():
+    global event
+    event = False
+    canvas.create_rectangle(0,0,HEIGHT_CANVAS,WIDHT_CANVAS,fill= 'white')
+    game_over['text'] = 'Vous avez perdu'
+    game_over.grid(row=3, column=1, columnspan=1)
+    Bouton_replay.grid(row=5, column=1)
+
+
+
 def clavier_up(event):
     Up()
     return
+
+
 def clavier_down(event):
     Down()
     return
+
+
 def clavier_right(event):
     Right()
     return
+
+
 def clavier_left(event):
     Left()
     return
@@ -883,7 +975,7 @@ racine.title("2048")
 canvas = tk.Canvas(bg='white', height=HEIGHT_CANVAS, width=WIDHT_CANVAS)
 
 
-# menu liste 
+# menu liste
 mode = tk.Menu(racine)
 racine['menu'] = mode
 ## menu partie
