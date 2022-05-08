@@ -793,7 +793,7 @@ def Save():
     elle permet de sauvgarder un la dernier liste"""
     if event_classique == True:
         fic = open("Save", "w")
-        fic.write("\n")
+        fic.write(str(0)+ "\n")
         for i in range(0, N):
             for j in range(0, N):
                 fic.write(str(liste_save[i][j])+"\n")
@@ -809,38 +809,49 @@ def Save():
         fic.close()
 
 def Load():
-    global liste_tuile, event4d, event_classique
+    global liste_tuile, event4d, event_classique, liste_tuile4D
     """"Fonction lier au bouton Charger
     elle peurmet de charger la liste sauvgarder dans le fichier save"""
     fic = open("Save", "r")
     line = fic.readline()
     Grille_S = []
-    if int(line) == 1:
-        event_classique = True
-        event4d = False
-        for i in range(N):
-           Grille_S.append([0]*N)
+    Coin_1 = []
+    Coin_2 = []
+    Coin_3 = []
+    Coin_4 = []
+    li = int(line)
+    if li == 1:
+        event_classique = False
+        event4d = True
+        for i in range(n):
+           Coin_1.append([0]*n)
+           Coin_2.append([0]*n)
+           Coin_3.append([0]*n)
+           Coin_4.append([0]*n)
+        Grille_S = [Coin_1, Coin_2, Coin_3, Coin_4]
         for line in fic:
-           for i in range(1, N+1):
-               for j in range(1, N+1):
-                    Grille_S[i][j] = int(line)
-                    line = fic.readline()
-        fic.close()
-        liste_tuile = np.array(Grille_S)
+            for k in range(N):
+                for i in range(0, n):
+                    for j in range(0, n):
+                        Grille_S[k][i][j] = int(line)
+                        line = fic.readline()
+        liste_tuile4D = np.array(Grille_S)
+        print(liste_tuile4D,"load")
         maj()
-    else:
+    elif li != 1:
        event_classique = True
        event4d = False
        for i in range(N):
            Grille_S.append([0]*N)
        for line in fic:
-           for i in range(1, N+1):
-               for j in range(1, N+1):
+           for i in range(0, N):
+               for j in range(0, N):
                     Grille_S[i][j] = int(line)
                     line = fic.readline()
-        fic.close()
-        liste_tuile = np.array(Grille_S)
-        maj()
+       liste_tuile = np.array(Grille_S)  
+       maj()
+    fic.close()
+    
 
 def Hard():
     """active l'evenement pour passer le jeu en hard"""
