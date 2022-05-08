@@ -9,317 +9,399 @@
 
 # ------------------------- Bibliothèques ------------------------- #
 import numpy as np
-import math
 from secrets import choice
 import tkinter as tk
 import random as rd
 import copy
 
-def rgb(r,g,b):
-     return f'#{r:02x}{g:02x}{b:02x}' 
+# --------------------------- Fonction ---------------------------- #
+
+
+def rgb(r, g, b):
+    return f'#{r:02x}{g:02x}{b:02x}'
+
 
 # --------------------------- Constante --------------------------- #
 HEIGHT_CANVAS = WIDHT_CANVAS = 400
 N = 4
 n = 2
+# ------------------------ Variable Globale ----------------------- #
 xh = HEIGHT_CANVAS/N
 yh = HEIGHT_CANVAS/N
 xb = HEIGHT_CANVAS/N
-yb =WIDHT_CANVAS/N
-Liste_sapwn_tuile = [2, 2, 2, 2, 2, 2, 2, 2, 2, 4]
-Liste_couleur = [rgb(187,173,160), rgb(238,228,218), rgb(231,216,191), rgb(237,173,118), rgb(235,145,94), rgb(240,118,90), 
-                 rgb(231,95,67), rgb(231,201,114), rgb(239,204,99), rgb(230,194,64), rgb(230,192,68), rgb(229,190,45)]
-liste_nombre = [2**n for n in range(1,15)]
+yb = WIDHT_CANVAS/N
+Liste_sapwn_tuile = [2, 4]
+Liste_couleur = [rgb(187, 173, 160), rgb(238, 228, 218), rgb(231, 216, 191),
+                 rgb(237, 173, 118), rgb(235, 145, 94), rgb(240, 118, 90),
+                 rgb(231, 95, 67), rgb(231, 201, 114), rgb(239, 204, 99),
+                 rgb(230, 194, 64), rgb(230, 192, 68), rgb(229, 190, 45)]
+liste_nombre = [2**n for n in range(1, 15)]
 Score = 0
 grille = []
 grille_tuile = []
 grille_nbr = []
 nbr_aleat = choice(Liste_sapwn_tuile)
-liste_tuile = np.array([[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]])
+liste_tuile = np.array([[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0],
+                        [0, 0, 0, 0]])
 event = True
 event_classique = False
 event4d = False
-grille1 = []  
+grille1 = []
 grille2 = []
 grille3 = []
 grille4 = []
-liste_tuile1 = np.array([[0,0],[0,0]])
-liste_tuile2 = np.array([[0,0],[0,0]])
-liste_tuile3 = np.array([[0,0],[0,0]])
-liste_tuile4 = np.array([[0,0],[0,0]])
+liste_tuile1 = np.array([[0, 0], [0, 0]])
+liste_tuile2 = np.array([[0, 0], [0, 0]])
+liste_tuile3 = np.array([[0, 0], [0, 0]])
+liste_tuile4 = np.array([[0, 0], [0, 0]])
 liste_tuile4D = [liste_tuile1, liste_tuile2, liste_tuile3, liste_tuile4]
 eventhard = False
+
+# --------------------------- Fonction ---------------------------- #
+
+
 def Classique():
     """
     Initialisation de notre grille.
     """
-    global Score, grille, event, grille_tuile, liste_tuile, grille_nbr, nbr_aleat, event_classique, event4d
+    global Score, grille, event, grille_tuile, liste_tuile, grille_nbr
+    global nbr_aleat, event_classique, event4d
+
     event_classique = True
     event4d = False
-    if event_classique == True:
-        if event == False:
+    if event_classique is True:
+        if event is False:
             Bouton_replay.destroy()
             game_over.destroy()
-        #Réinitialisation des variables globales 
+        # Réinitialisation des variables globales 
         Score = 0
         grille = []  # grille
         grille_tuile = []
         grille_nbr = []
-        liste_tuile = np.array([[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]])
+        liste_tuile = np.array([[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0],
+                                [0, 0, 0, 0]])
         event = True
         nbr_aleat = choice(Liste_sapwn_tuile)
         maj_score()
-        #Création de la grille
+        # Création de la grille
         grille = []
         for i in range(0, N):
             intermediaire = []
             for j in range(1, N+1):
-                intermediaire.append(canvas.create_rectangle((j-1)*xh, i*yh, j*xb, (i+1)*yb,
-                                                    fill=rgb(208,193,180), outline=Liste_couleur[0], width=10))
+                intermediaire.append(canvas.create_rectangle((j-1)*xh, i*yh,
+                                                             j*xb, (i+1)*yb,
+                                                             fill=rgb(208, 193, 180),
+                                                             outline=Liste_couleur[0],
+                                                             width=10))
             grille.append(intermediaire)
-        #Création de deux tuiles: 2 ou 4 
-        for i in range(0,2):
+        # Création de deux tuiles: 2 ou 4
+        for i in range(0, 2):
             spawn_tuile()
             maj()
     return
+
 
 def Secondmode():
     """
     Initialisation de notre grille.
     """
-    global Score, grille1, grille2, grille3, grille4, event, liste_tuile1, liste_tuile2, liste_tuile3, liste_tuile4, liste_tuile4D, nbr_aleat, event_classique, event4d
+    global Score, grille1, grille2, grille3, grille4, event, liste_tuile1
+    global liste_tuile2, liste_tuile3, liste_tuile4, liste_tuile4D, nbr_aleat
+    global event_classique, event4d
+
     event_classique = False
     event4d = True
-    if event4d == True:
-        if event == False:
+    if event4d is True:
+        if event is False:
             Bouton_replay.destroy()
             game_over.destroy()
-        #Réinitialisation des variables globales 
+        # Réinitialisation des variables globales
         Score = 0
-        grille1 = []  
+        grille1 = []
         grille2 = []
         grille3 = []
         grille4 = []
-        liste_tuile1 = np.array([[0,0],[0,0]])
-        liste_tuile2 = np.array([[0,0],[0,0]])
-        liste_tuile3 = np.array([[0,0],[0,0]])
-        liste_tuile4 = np.array([[0,0],[0,0]])
-        liste_tuile4D = [liste_tuile1, liste_tuile2, liste_tuile3, liste_tuile4]
+        liste_tuile1 = np.array([[0, 0], [0, 0]])
+        liste_tuile2 = np.array([[0, 0], [0, 0]])
+        liste_tuile3 = np.array([[0, 0], [0, 0]])
+        liste_tuile4 = np.array([[0, 0], [0, 0]])
+        liste_tuile4D = [liste_tuile1, liste_tuile2, liste_tuile3, 
+                         liste_tuile4]
         event = True
         nbr_aleat = choice(Liste_sapwn_tuile)
-        #Création de la grille
-        #On crée une grille correspondante au second mode de jeu
-        #Chaque boucle correspond à une grille
-        # 1ere bouvle: coin sup gauche 
-        for i in range(0,n):
+        # Création de la grille
+        # On crée une grille correspondante au second mode de jeu
+        # Chaque boucle correspond à une grille
+        # 1ere bouvle: coin sup gauche
+        for i in range(0, n):
             intermediaire = []
-            for j in range(0,n):
-                intermediaire.append(canvas.create_rectangle(i*xh-5, j*yh-5, (i+1)*xh-5, (j+1)*yh-5 , fill=rgb(208,193,180), outline=Liste_couleur[0], width=10))
+            for j in range(0, n):
+                intermediaire.append(canvas.create_rectangle(i*xh-5, j*yh-5,
+                                                             (i+1)*xh-5,
+                                                             (j+1)*yh-5,
+                                                             fill=rgb(208, 193, 180),
+                                                             outline=Liste_couleur[0],
+                                                             width=10))
             grille1.append(intermediaire)
-        #2eme boucle: coin sup droit
-        for i in range(n,N):
+        # 2eme boucle: coin sup droit
+        for i in range(n, N):
             intermediaire = []
-            for j in range(0,n):
-                intermediaire.append(canvas.create_rectangle(i*xh+5, j*yh-5, (i+1)*xh+5, (j+1)*yh-5 , fill=rgb(208,193,180), outline=Liste_couleur[0], width=10))    
+            for j in range(0, n):
+                intermediaire.append(canvas.create_rectangle(i*xh+5, j*yh-5,
+                                                             (i+1)*xh+5,
+                                                             (j+1)*yh-5, 
+                                                             fill=rgb(208, 193, 180),
+                                                             outline=Liste_couleur[0],
+                                                             width=10)) 
             grille2.append(intermediaire)
-        #3eme boucle: coin inf gauche
-        for i in range(0,n):
+        # 3eme boucle: coin inf gauche
+        for i in range(0, n):
             intermediaire = []
-            for j in range(n,N):
-                intermediaire.append(canvas.create_rectangle(i*xh-5, j*yh+5, (i+1)*xh-5, (j+1)*yh+5 , fill=rgb(208,193,180), outline=Liste_couleur[0], width=10))    
+            for j in range(n, N):
+                intermediaire.append(canvas.create_rectangle(i*xh-5, j*yh+5,
+                                                             (i+1)*xh-5,
+                                                             (j+1)*yh+5,
+                                                             fill=rgb(208, 193, 180),
+                                                             outline=Liste_couleur[0],
+                                                             width=10))    
             grille3.append(intermediaire)
-        #4eme boucle: coin inf droit
-        for i in range(n,N):
+        # 4eme boucle: coin inf droit
+        for i in range(n, N):
             intermediaire = []
-            for j in range(n,N):
-                intermediaire.append(canvas.create_rectangle(i*xh+5, j*yh+5, (i+1)*xh+5, (j+1)*yh+5 , fill=rgb(208,193,180), outline=Liste_couleur[0], width=10))
+            for j in range(n, N):
+                intermediaire.append(canvas.create_rectangle(i*xh+5, j*yh+5,
+                                                             (i+1)*xh+5,
+                                                             (j+1)*yh+5,
+                                                             fill=rgb(208, 193, 180),
+                                                             outline=Liste_couleur[0],
+                                                             width=10))
             grille4.append(intermediaire)
-        canvas.create_line(WIDHT_CANVAS//2, 0, WIDHT_CANVAS//2, HEIGHT_CANVAS, fill=Liste_couleur[0], width=20)
-        canvas.create_line(0, HEIGHT_CANVAS//2, WIDHT_CANVAS, HEIGHT_CANVAS//2, fill=Liste_couleur[0], width=20)
+        canvas.create_line(WIDHT_CANVAS//2, 0, WIDHT_CANVAS//2, HEIGHT_CANVAS,
+                           fill=Liste_couleur[0], width=20)
+        canvas.create_line(0, HEIGHT_CANVAS//2, WIDHT_CANVAS, HEIGHT_CANVAS//2,
+                           fill=Liste_couleur[0], width=20)
         spawn_tuile()
         maj()
     return
 
+
 def tuile(x, y):
     """Création des tuiles : fond + chiffre"""
-    global grille_nbr, nbr_aleat, liste_tuile, liste_tuile1, liste_tuile2, liste_tuile3, liste_tuile4
-    if event_classique == True:
-        if liste_tuile[x][y] == 2:  
-        #Création du fond de la tuile 
-            grille_tuile.append(canvas.create_rectangle(y*xh, x*yh, (y+1)*xb, (x+1)*yb,
-                                                fill=Liste_couleur[1],
-                                                outline=Liste_couleur[0], width=10
-                                                ))
+    global grille_nbr, nbr_aleat, liste_tuile, liste_tuile1, liste_tuile2
+    global liste_tuile3, liste_tuile4
+    if event_classique is True:
+        if liste_tuile[x][y] == 2:
+            # Création du fond de la tuile
+            grille_tuile.append(canvas.create_rectangle(y*xh, x*yh, (y+1)*xb,
+                                                        (x+1)*yb,
+                                                        fill=Liste_couleur[1],
+                                                        outline=Liste_couleur[0],
+                                                        width=10))
         else:
-            grille_tuile.append(canvas.create_rectangle(y*xh, x*yh, (y+1)*xb, (x+1)*yb,
-                                                fill=Liste_couleur[2],
-                                                outline=Liste_couleur[0], width=10
-                                                ))
-        #Création du chiffre sur la tuile   
-        grille_nbr.append(canvas.create_text((y*(xh+xb)+xb)//2, (x*(yb+yh)+yh)//2,
-                                            text=str(liste_tuile[x][y]), 
-                                            fill=rgb(120,111,102), 
-                                            font=("arial black", 30))
-                                            )
-    elif event4d == True:
+            grille_tuile.append(canvas.create_rectangle(y*xh, x*yh, (y+1)*xb,
+                                                        (x+1)*yb,
+                                                        fill=Liste_couleur[2],
+                                                        outline=Liste_couleur[0],
+                                                        width=10))
+        # Création du chiffre sur la tuile
+        grille_nbr.append(canvas.create_text((y*(xh+xb)+xb)//2,
+                                             (x*(yb+yh)+yh)//2,
+                                             text=str(liste_tuile[x][y]),
+                                             fill=rgb(120, 111, 102),
+                                             font=("arial black", 30)))
+    elif event4d is True:
         for tuile in liste_tuile4D:
-            if tuile[x][y] == 2:  
-            #Création du fond de la tuile 
-                grille_tuile.append(canvas.create_rectangle(y*xh, x*yh, (y+1)*xb, (x+1)*yb,
-                                                    fill=Liste_couleur[1],
-                                                    outline=Liste_couleur[0], width=10
-                                                    ))
+            if tuile[x][y] == 2:
+                # Création du fond de la tuile
+                grille_tuile.append(canvas.create_rectangle(y*xh, x*yh,
+                                                            (y+1)*xb,
+                                                            (x+1)*yb,
+                                                            fill=Liste_couleur[1],
+                                                            outline=Liste_couleur[0],
+                                                            width=10))
             else:
-                grille_tuile.append(canvas.create_rectangle(y*xh, x*yh, (y+1)*xb, (x+1)*yb,
-                                                    fill=Liste_couleur[2],
-                                                    outline=Liste_couleur[0], width=10
-                                                    ))
-            #Création du chiffre sur la tuile   
-            grille_nbr.append(canvas.create_text((y*(xh+xb)+xb)//2, (x*(yb+yh)+yh)//2,
-                                                text=str(tuile[x][y]), 
-                                                fill=rgb(120,111,102), 
-                                                font=("arial black", 30))
-                                                )
+                grille_tuile.append(canvas.create_rectangle(y*xh, x*yh,
+                                                            (y+1)*xb,
+                                                            (x+1)*yb,
+                                                            fill=Liste_couleur[2],
+                                                            outline=Liste_couleur[0],
+                                                            width=10))
+            # Création du chiffre sur la tuile   
+            grille_nbr.append(canvas.create_text((y*(xh+xb)+xb)//2,
+                                                 (x*(yb+yh)+yh)//2,
+                                                 text=str(tuile[x][y]),
+                                                 fill=rgb(120, 111, 102),
+                                                 font=("arial black", 30)))
     return
 
+
 def maj():
-    global grille_nbr, grille_tuile, liste_tuile, liste_tuile4D, liste_tuile1, liste_tuile2, liste_tuile3, liste_tuile4, event4d, event_classique
-    if event_classique == True:
+    global grille_nbr, grille_tuile, liste_tuile, liste_tuile4D, liste_tuile1
+    global liste_tuile2, liste_tuile3, liste_tuile4, event4d, event_classique
+    if event_classique is True:
         for elmnt in grille_tuile:
             canvas.delete(elmnt)
         for elmnt in grille_nbr:
             canvas.delete(elmnt)
-        grille_tuile=[]
-        grille_nbr=[]
+        grille_tuile = []
+        grille_nbr = []
         for i in range(0, len(liste_tuile)):
             for j in range(0, len(liste_tuile)):
                 for k in range(1, 3):
                     if liste_tuile[i][j] == 2**k:
-                        grille_tuile.append(canvas.create_rectangle(j*xh, i*yh, (j+1)*xb, (i+1)*yb,
-                                                fill=Liste_couleur[k],
-                                                outline=Liste_couleur[0], width=10
-                                                ))
-                        grille_nbr.append(canvas.create_text((j*(xh+xb)+xb)//2, (i*(yb+yh)+yh)//2,
-                                            text=str(liste_tuile[i][j]), 
-                                            fill=rgb(120,111,102), 
-                                            font=("arial black", 30))
-                                            )
+                        grille_tuile.append(canvas.create_rectangle(j*xh, i*yh,
+                                                                    (j+1)*xb, 
+                                                                    (i+1)*yb,
+                                                                    fill=Liste_couleur[k],
+                                                                    outline=Liste_couleur[0],
+                                                                    width=10))
+                        grille_nbr.append(canvas.create_text((j*(xh+xb)+xb)//2,
+                                                             (i*(yb+yh)+yh)//2,
+                                                             text=str(liste_tuile[i][j]),
+                                                             fill=rgb(120, 111, 102), 
+                                                             font=("arial black", 30)))
                 for k in range(3, 20):
                     if liste_tuile[i][j] == 2**k:
-                        grille_tuile.append(canvas.create_rectangle(j*xh, i*yh, (j+1)*xb, (i+1)*yb,
-                                                fill=Liste_couleur[k],
-                                                outline=Liste_couleur[0], width=10
-                                                ))
-                        grille_nbr.append(canvas.create_text((j*(xh+xb)+xb)//2, (i*(yb+yh)+yh)//2,
-                                            text=str(liste_tuile[i][j]), 
-                                            fill='white', 
-                                            font=("arial black", 30))
-                                        )
-    elif event4d == True:
+                        grille_tuile.append(canvas.create_rectangle(j*xh, i*yh,
+                                                                    (j+1)*xb,
+                                                                    (i+1)*yb,
+                                                                    fill=Liste_couleur[k],
+                                                                    outline=Liste_couleur[0],
+                                                                    width=10))
+                        grille_nbr.append(canvas.create_text((j*(xh+xb)+xb)//2,
+                                                             (i*(yb+yh)+yh)//2,
+                                                             text=str(liste_tuile[i][j]),
+                                                             fill='white',
+                                                             font=("arial black", 30)))
+    elif event4d is True:
         for elmnt in grille_tuile:
             canvas.delete(elmnt)
         for elmnt in grille_nbr:
             canvas.delete(elmnt)
-        grille_tuile=[]
-        grille_nbr=[]
+        grille_tuile = []
+        grille_nbr = []
         for i in range(0, n):
             for j in range(0, n):
                 for k in range(1, 3):
-                    #1ere grille
+                    # 1ere grille
                     if liste_tuile4D[0][i][j] == 2**k:
-                        grille_tuile.append(canvas.create_rectangle(j*xh-5, i*yh-5, (j+1)*xb-5, (i+1)*yb-5,
-                                                fill=Liste_couleur[k],
-                                                outline=Liste_couleur[0], width=10
-                                                ))
-                        grille_nbr.append(canvas.create_text((j*(xh+xb-5)+xb-5)//2, (i*(yb+yh-5)+yh-5)//2,
-                                            text=str(liste_tuile4D[0][i][j]), 
-                                            fill=rgb(120,111,102), 
-                                            font=("arial black", 30))
-                                            )
-                    #2eme grille
+                        grille_tuile.append(canvas.create_rectangle(j*xh-5,
+                                                                    i*yh-5,
+                                                                    (j+1)*xb-5,
+                                                                    (i+1)*yb-5,
+                                                                    fill=Liste_couleur[k],
+                                                                    outline=Liste_couleur[0],
+                                                                    width=10))
+                        grille_nbr.append(canvas.create_text((j*(xh+xb-5)+xb-5)//2,
+                                                             (i*(yb+yh-5)+yh-5)//2,
+                                                             text=str(liste_tuile4D[0][i][j]),
+                                                             fill=rgb(120, 111, 102), 
+                                                             font=("arial black", 30)))
+                    # 2eme grille                        
                     if liste_tuile4D[1][i][j] == 2**k:
-                        grille_tuile.append(canvas.create_rectangle((j+2)*xh+5, i*yh-5, (j+3)*xb+5, (i+1)*yb-5,
-                                                fill=Liste_couleur[k],
-                                                outline=Liste_couleur[0], width=10
-                                                ))
-                        grille_nbr.append(canvas.create_text(((j+2)*(xh+xb+5)+xb+5)//2, (i*(yb+yh-5)+yh-5)//2,
-                                            text=str(liste_tuile4D[1][i][j]), 
-                                            fill=rgb(120,111,102), 
-                                            font=("arial black", 30))
-                                            )
-                    #3eme grille
+                        grille_tuile.append(canvas.create_rectangle((j+2)*xh+5,
+                                                                    i*yh-5,
+                                                                    (j+3)*xb+5,
+                                                                    (i+1)*yb-5,
+                                                                    fill=Liste_couleur[k],
+                                                                    outline=Liste_couleur[0], 
+                                                                    width=10))
+                        grille_nbr.append(canvas.create_text(((j+2)*(xh+xb+5)+xb+5)//2,
+                                                             (i*(yb+yh-5)+yh-5)//2,
+                                                             text=str(liste_tuile4D[1][i][j]),
+                                                             fill=rgb(120, 111, 102), 
+                                                             font=("arial black", 30)))
+                    # 3eme grille
                     if liste_tuile4D[2][i][j] == 2**k:
-                        grille_tuile.append(canvas.create_rectangle(j*xh-5, (i+2)*yh+5, (j+1)*xb-5, (i+3)*yb+5,
-                                                fill=Liste_couleur[k],
-                                                outline=Liste_couleur[0], width=10
-                                                ))
-                        grille_nbr.append(canvas.create_text((j*(xh+xb-5)+xb-5)//2, ((i+2)*(yb+yh+5)+yh+5)//2,
-                                            text=str(liste_tuile4D[2][i][j]), 
-                                            fill=rgb(120,111,102), 
-                                            font=("arial black", 30))
-                                            )
-                    #4eme grille
+                        grille_tuile.append(canvas.create_rectangle(j*xh-5, 
+                                                                    (i+2)*yh+5,
+                                                                    (j+1)*xb-5,
+                                                                    (i+3)*yb+5,
+                                                                    fill=Liste_couleur[k],
+                                                                    outline=Liste_couleur[0],
+                                                                    width=10))
+                        grille_nbr.append(canvas.create_text((j*(xh+xb-5)+xb-5)//2,
+                                                             ((i+2)*(yb+yh+5)+yh+5)//2,
+                                                             text=str(liste_tuile4D[2][i][j]),
+                                                             fill=rgb(120, 111, 102), 
+                                                             font=("arial black", 30)))
+                    # 4eme grille
                     if liste_tuile4D[3][i][j] == 2**k:
-                        grille_tuile.append(canvas.create_rectangle((j+2)*xh+5, (i+2)*yh+5, (j+3)*xb+5, (i+3)*yb+5,
-                                                fill=Liste_couleur[k],
-                                                outline=Liste_couleur[0], width=10
-                                                ))
-                        grille_nbr.append(canvas.create_text(((j+2)*(xh+xb+5)+xb+5)//2, ((i+2)*(yb+yh+5)+yh+5)//2,
-                                            text=str(liste_tuile4D[3][i][j]), 
-                                            fill=rgb(120,111,102), 
-                                            font=("arial black", 30))
-                                            )
+                        grille_tuile.append(canvas.create_rectangle((j+2)*xh+5,
+                                                                    (i+2)*yh+5,
+                                                                    (j+3)*xb+5,
+                                                                    (i+3)*yb+5,
+                                                                    fill=Liste_couleur[k],
+                                                                    outline=Liste_couleur[0],
+                                                                    width=10))
+                        grille_nbr.append(canvas.create_text(((j+2)*(xh+xb+5)+xb+5)//2, 
+                                                             ((i+2)*(yb+yh+5)+yh+5)//2,
+                                                             text=str(liste_tuile4D[3][i][j]),
+                                                             fill=rgb(120, 111, 102), 
+                                                             font=("arial black", 30)))
                 for k in range(3, 20):
-                    #1ere grille
+                    # 1ere grille
                     if liste_tuile4D[0][i][j] == 2**k:
-                        grille_tuile.append(canvas.create_rectangle(j*xh-5, i*yh-5, (j+1)*xb-5, (i+1)*yb-5,
-                                                fill=Liste_couleur[k],
-                                                outline=Liste_couleur[0], width=10
-                                                ))
-                        grille_nbr.append(canvas.create_text((j*(xh+xb-5)+xb-5)//2, (i*(yb+yh-5)+yh-5)//2,
-                                            text=str(liste_tuile4D[0][i][j]), 
-                                            fill='white', 
-                                            font=("arial black", 30))
-                                            )
-                    #2eme grille
+                        grille_tuile.append(canvas.create_rectangle(j*xh-5,
+                                                                    i*yh-5,
+                                                                    (j+1)*xb-5,
+                                                                    (i+1)*yb-5,
+                                                                    fill=Liste_couleur[k],
+                                                                    outline=Liste_couleur[0], 
+                                                                    width=10))
+                        grille_nbr.append(canvas.create_text((j*(xh+xb-5)+xb-5)//2,
+                                                             (i*(yb+yh-5)+yh-5)//2,
+                                                             text=str(liste_tuile4D[0][i][j]),
+                                                             fill='white',
+                                                             font=("arial black", 30)))
+                    # 2eme grille
                     if liste_tuile4D[1][i][j] == 2**k:
                         grille_tuile.append(canvas.create_rectangle((j+2)*xh+5, i*yh-5, (j+3)*xb+5, (i+1)*yb-5,
-                                                fill=Liste_couleur[k],
-                                                outline=Liste_couleur[0], width=10
-                                                ))
-                        grille_nbr.append(canvas.create_text(((j+2)*(xh+xb+5)+xb+5)//2, (i*(yb+yh-5)+yh-5)//2,
-                                            text=str(liste_tuile4D[1][i][j]), 
-                                            fill='white', 
-                                            font=("arial black", 30))
-                                            )
-                    #3eme grille
+                                                                    fill=Liste_couleur[k],
+                                                                    outline=Liste_couleur[0],
+                                                                    width=10))
+                        grille_nbr.append(canvas.create_text(((j+2)*(xh+xb+5)+xb+5)//2,
+                                                             (i*(yb+yh-5)+yh-5)//2,
+                                                             text=str(liste_tuile4D[1][i][j]),
+                                                             fill='white', 
+                                                             font=("arial black", 30)))
+                    # 3eme grille
                     if liste_tuile4D[2][i][j] == 2**k:
-                        grille_tuile.append(canvas.create_rectangle(j*xh-5, (i+2)*yh+5, (j+1)*xb-5, (i+3)*yb+5,
-                                                fill=Liste_couleur[k],
-                                                outline=Liste_couleur[0], width=10
-                                                ))
-                        grille_nbr.append(canvas.create_text((j*(xh+xb-5)+xb-5)//2, ((i+2)*(yb+yh+5)+yh+5)//2,
-                                            text=str(liste_tuile4D[2][i][j]), 
-                                            fill='white', 
-                                            font=("arial black", 30))
-                                            )
-                    #4eme grille
+                        grille_tuile.append(canvas.create_rectangle(j*xh-5, 
+                                                                    (i+2)*yh+5,
+                                                                    (j+1)*xb-5,
+                                                                    (i+3)*yb+5,
+                                                                    fill=Liste_couleur[k],
+                                                                    outline=Liste_couleur[0],
+                                                                    width=10))
+                        grille_nbr.append(canvas.create_text((j*(xh+xb-5)+xb-5)//2,
+                                                             ((i+2)*(yb+yh+5)+yh+5)//2,
+                                                             text=str(liste_tuile4D[2][i][j]),
+                                                             fill='white',
+                                                             font=("arial black", 30)))
+                    # 4eme grille
                     if liste_tuile4D[3][i][j] == 2**k:
-                        grille_tuile.append(canvas.create_rectangle((j+2)*xh+5, (i+2)*yh+5, (j+3)*xb+5, (i+3)*yb+5,
-                                                fill=Liste_couleur[k],
-                                                outline=Liste_couleur[0], width=10
-                                                ))
-                        grille_nbr.append(canvas.create_text(((j+2)*(xh+xb+5)+xb+5)//2, ((i+2)*(yb+yh+5)+yh+5)//2,
-                                            text=str(liste_tuile4D[3][i][j]), 
-                                            fill='white', 
-                                            font=("arial black", 30))
-                                            )
+                        grille_tuile.append(canvas.create_rectangle((j+2)*xh+5,
+                                                                    (i+2)*yh+5,
+                                                                    (j+3)*xb+5,
+                                                                    (i+3)*yb+5,
+                                                                    fill=Liste_couleur[k],
+                                                                    outline=Liste_couleur[0],
+                                                                    width=10))
+                        grille_nbr.append(canvas.create_text(((j+2)*(xh+xb+5)+xb+5)//2,
+                                                             ((i+2)*(yb+yh+5)+yh+5)//2,
+                                                             text=str(liste_tuile4D[3][i][j]),
+                                                             fill='white',
+                                                             font=("arial black", 30)))                                     
     return
+
 
 def spawn_tuile():
     """Fait apparaitre les tuiles à des positions aléatoires"""
-    global liste_tuile, event, liste_tuile4D, liste_nbr, nbr_aleat, event, liste_tuile1, liste_tuile2, liste_tuile3, liste_tuile4, event4d, event_classique
-    if event_classique == True:
+    global liste_tuile, event, liste_tuile4D, liste_nbr, nbr_aleat
+    global event, liste_tuile1, liste_tuile2, liste_tuile3
+    global liste_tuile4, event4d, event_classique
+    if event_classique is True:
         if eventhard == False:
             if 0 in liste_tuile and event == True:
                 nbr_aleat = choice(Liste_sapwn_tuile)
@@ -711,35 +793,54 @@ def Save():
     elle permet de sauvgarder un la dernier liste"""
     if event_classique == True:
         fic = open("Save", "w")
+        fic.write("\n")
         for i in range(0, N):
             for j in range(0, N):
                 fic.write(str(liste_save[i][j])+"\n")
         fic.close()
     elif event4d == True:
+        fic = open("Save", "w")
+        fic.write(str(1)+ "\n")
         for tuile in liste_tuile4D:
             liste_save = copy.deepcopy(tuile)
-            fic = open("Save", "w")
             for i in range(0, n):
                 for j in range(0, n):
                     fic.write(str(liste_save[i][j])+"\n")
         fic.close()
 
 def Load():
-     global liste_tuile
-     """"Fonction lier au bouton Charger
-     elle peurmet de charger la liste sauvgarder dans le fichier save"""
-     fic = open("Save", "r")
-     Grille_S = []
-     for i in range(N):
-         Grille_S.append([0]*N)
-     for line in fic:
-         for i in range(0, N):
-             for j in range(0, N):
-                 Grille_S[i][j] = int(line)
-                 line = fic.readline()
-     fic.close()
-     liste_tuile = np.array(Grille_S)
-     maj()
+    global liste_tuile, event4d, event_classique
+    """"Fonction lier au bouton Charger
+    elle peurmet de charger la liste sauvgarder dans le fichier save"""
+    fic = open("Save", "r")
+    line = fic.readline()
+    Grille_S = []
+    if int(line) == 1:
+        event_classique = True
+        event4d = False
+        for i in range(N):
+           Grille_S.append([0]*N)
+        for line in fic:
+           for i in range(1, N+1):
+               for j in range(1, N+1):
+                    Grille_S[i][j] = int(line)
+                    line = fic.readline()
+        fic.close()
+        liste_tuile = np.array(Grille_S)
+        maj()
+    else:
+       event_classique = True
+       event4d = False
+       for i in range(N):
+           Grille_S.append([0]*N)
+       for line in fic:
+           for i in range(1, N+1):
+               for j in range(1, N+1):
+                    Grille_S[i][j] = int(line)
+                    line = fic.readline()
+        fic.close()
+        liste_tuile = np.array(Grille_S)
+        maj()
 
 def Hard():
     """active l'evenement pour passer le jeu en hard"""
@@ -766,9 +867,18 @@ racine = tk.Tk()
 racine.title("2048")
 canvas = tk.Canvas(bg='white', height=HEIGHT_CANVAS, width=WIDHT_CANVAS)
 
+
+# menu liste 
+mode = tk.Menu(racine)
+racine['menu'] = mode
+## menu partie
+party = tk.Menu(mode, tearoff=0)
+party.add_command(label='Classique', command=Classique)
+party.add_command(label='hard', command=Hard)
+party.add_command(label="4D", command=Secondmode)
+mode.add_cascade(label="Partie", menu = party)
 # Bouttons
 Bouton_Play = tk.Button(text='Classique', command=Classique)
-Bouton_hard = tk.Button(text='hard', command=Hard)
 Bouton_Exit = tk.Button(text="Exit", command=End)
 Bouton_Save = tk.Button(text="Sauvegarder", command=Save)
 Bouton_Load = tk.Button(text="Charger", command=Load)
@@ -798,7 +908,6 @@ Bouton_Down.grid(row=3, column=4)
 Bouton_Right.grid(row=3, column=3)
 Bouton_Left.grid(row=3, column=5)
 Bouton_4d.grid(row=3, column=0)
-Bouton_hard.grid(row=4, column=0)
 #Clavier
 racine.bind("<Up>", clavier_up)
 racine.bind("<Down>", clavier_down)
