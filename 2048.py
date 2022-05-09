@@ -84,8 +84,7 @@ def Classique():
     event_win = False
     if event_classique is True:
         if event is False:
-            Bouton_replay.grid_forget()
-            game_over.grid_forget()
+            frame_end.grid_forget()
         # Réinitialisation des variables globales
         Score = 0
         grille = []  # grille
@@ -123,8 +122,7 @@ def Secondmode():
     event_win = False
     if event4d is True:
         if event is False:
-            Bouton_replay.grid_forget()
-            game_over.grid_forget()
+            frame_end.grid_forget()
         # Réinitialisation des variables globales
         Score = 0
         grille1 = []
@@ -418,20 +416,37 @@ def spawn_tuile():
 
 def maj_score():
     global liste_tuile, Score, liste_tuile4D, liste_tuile1, liste_tuile2
-    global liste_tuile3, liste_tuile4, event4d, event_classique
-    if event_classique is True:
-        Score = 0
-        for i in range(0, len(liste_tuile)):
-            for j in range(0, len(liste_tuile)):
-                Score += liste_tuile[i][j]
-        Label_Valeur_Score.configure(text=str(Score))
-    elif event4d is True:
-        Score = 0
-        for tuile in liste_tuile4D:
-            for i in range(0, len(tuile)):
-                for j in range(0, len(tuile)):
-                    Score += tuile[i][j]
-        Label_Valeur_Score.configure(text=str(Score))
+    global liste_tuile3, liste_tuile4, event4d, event_classique, event
+    if event is True:
+        if event_classique is True:
+            Score = 0
+            for i in range(0, len(liste_tuile)):
+                for j in range(0, len(liste_tuile)):
+                    Score += liste_tuile[i][j]
+            Label_Valeur_Score.configure(text=str(Score))
+        elif event4d is True:
+            Score = 0
+            for tuile in liste_tuile4D:
+                for i in range(0, len(tuile)):
+                    for j in range(0, len(tuile)):
+                        Score += tuile[i][j]
+            Label_Valeur_Score.configure(text=str(Score))
+    else:
+        if event_classique is True:
+            Score = 0
+            for i in range(0, len(liste_tuile)):
+                for j in range(0, len(liste_tuile)):
+                    Score += liste_tuile[i][j]
+            End_score.configure(text=str(Score))
+            Label_Valeur_Score.configure(text=str(Score))
+        elif event4d is True:
+            Score = 0
+            for tuile in liste_tuile4D:
+                for i in range(0, len(tuile)):
+                    for j in range(0, len(tuile)):
+                        Score += tuile[i][j]
+            End_score.configure(text=str(Score))
+            Label_Valeur_Score.configure(text=str(Score))
     return Score
 
 
@@ -705,8 +720,6 @@ def Right():
     """"Fonction lier au bouton Droite """
     global Score, liste_tuile, grille_tuile, grille_nbr, event, liste_tuile4D, liste_tuile1, liste_tuile2, liste_tuile3
     global liste_tuile4, event_classique, event4d
-    compteur = 0
-    nbr_zero = 0
     if event_classique is True:
         if event is True:
             L = copy.deepcopy(liste_tuile)
@@ -743,8 +756,6 @@ def Right():
                 for j in range(0, len(liste_tuile)):
                     if L[i][j] == liste_tuile[i][j]:
                         compteur += 1
-                    if L[i][j] == 0:
-                        nbr_zero += 1
             if compteur != 16:
                 spawn_tuile()
                 maj()
@@ -795,10 +806,18 @@ def End():
     global event
     """"Fonction lier au bouton Exit """
     event = False
-    canvas.create_rectangle(0, 0, HEIGHT_CANVAS+2, WIDHT_CANVAS+2, fill='white')
-    game_over['text'] = 'Vous avez perdu'
-    game_over.grid(row=3, column=1, columnspan=1)
-    Bouton_replay.grid(row=5, column=1)
+    maj_score()
+    frame_end.grid(row=0, column=0, columnspan=2, rowspan=3)
+    frame_end.rowconfigure(0, weight=WIDHT_CANVAS//3)
+    frame_end.rowconfigure(1, weight=WIDHT_CANVAS//3)
+    frame_end.rowconfigure(1, weight=WIDHT_CANVAS//3)
+    frame_end.columnconfigure(0, weight=WIDHT_CANVAS//2)
+    frame_end.columnconfigure(1, weight=WIDHT_CANVAS//2)
+    frame_end.grid_propagate(0)
+    game_over.grid(row=0, column=0, columnspan=2)
+    End_score_text.grid(row=1, column=0)
+    End_score.grid(row=1, column=1)
+    Bouton_replay.grid(row=2, column=0, columnspan=2)
 
 
 def Save():
@@ -925,36 +944,42 @@ party.add_command(label='Classique', command=Classique)
 party.add_command(label='hard', command=Hard)
 party.add_command(label="4D", command=Secondmode)
 menu.add_cascade(label="Mode", menu=party)
+
 # Frame
-frame = tk.Frame()
+frame_1 = tk.Frame()
+frame_2 = tk.Frame()
+frame_end = tk.Frame(canvas, bg="white", height=HEIGHT_CANVAS, width=WIDHT_CANVAS)
+
 # Bouttons
 Bouton_Play = tk.Button(text='Classique', command=Classique)
 Bouton_Exit = tk.Button(text="Exit", command=End)
 Bouton_Save = tk.Button(text="Sauvegarder", command=Save)
 Bouton_Load = tk.Button(text="Charger", command=Load)
-Bouton_Up = tk.Button(frame, text=("▲"), font="30", command=Up)
-Bouton_Down = tk.Button(frame, text=("▼"), font="30", command=Down)
-Bouton_Left = tk.Button(frame, text="►", font="30", command=Right)
-Bouton_Right = tk.Button(frame, text="◄", font="30", command=Left)
-Bouton_replay = tk.Button(text="replay", command=Classique)
-# Bouton_classique = tk.Button(text="classique", command=Classique)
+Bouton_Up = tk.Button(frame_2, text=("▲"), font="30", command=Up)
+Bouton_Down = tk.Button(frame_2, text=("▼"), font="30", command=Down)
+Bouton_Left = tk.Button(frame_2, text="►", font="30", command=Right)
+Bouton_Right = tk.Button(frame_2, text="◄", font="30", command=Left)
+Bouton_replay = tk.Button(frame_end, text="Rejouer", font="30", command=Classique)
 Bouton_4d = tk.Button(text="4D", command=Secondmode)
 
 # Label
-Label_Score = tk.Label(text="Score :", foreground="Black", font="Arial, 10")
-Label_Valeur_Score = tk.Label(text=str(Score), foreground="Blue", font="Arial 10")
-game_over = tk.Label(text="Fin de la partie", foreground='Black', font='Arial 30')
+Label_Score = tk.Label(frame_1, text="Score :", foreground="Black", font="Arial, 10")
+Label_Valeur_Score = tk.Label(frame_1, text=str(Score), foreground="Black", font="Arial 10")
+End_score_text = tk.Label(frame_end, text="Votre score :", bg='white', foreground="Black", font="Arial, 30")
+End_score = tk.Label(frame_end, text=str(Score), bg='white', foreground="Black", font="Arial 30")
+game_over = tk.Label(frame_end, text="Fin de la partie", bg='white', foreground='Black', font='Arial 30')
 
 # Placement des éléments
-Label_Score.grid(row=0, column=1, columnspan=1)
-Label_Valeur_Score.grid(row=0, column=2, columnspan=1)
+frame_1.grid(row=0, column=0, columnspan=4)
+Label_Score.grid(row=0, column=1)
+Label_Valeur_Score.grid(row=0, column=2)
 canvas.grid(row=1, column=1, columnspan=1, rowspan=7)
 Bouton_Play.grid(row=2, column=0)
 Bouton_4d.grid(row=3, column=0)
 Bouton_Exit.grid(row=4, column=0)
 Bouton_Save.grid(row=5, column=0)
 Bouton_Load.grid(row=6, column=0)
-frame.grid(row=0, column=3, rowspan=7)
+frame_2.grid(row=0, column=3, rowspan=7)
 Bouton_Up.grid(row=0, column=1)
 Bouton_Down.grid(row=3, column=1)
 Bouton_Right.grid(row=3, column=0)
